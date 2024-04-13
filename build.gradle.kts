@@ -57,4 +57,6 @@ dependencies {
     //EMAIL
     implementation("jakarta.mail:jakarta.mail-api:$emailVersion")
 
+    implementation("io.ktor:ktor-server-status-pages:$kotlinVersion")
+
 }

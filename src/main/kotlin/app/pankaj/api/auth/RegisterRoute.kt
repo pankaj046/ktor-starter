@@ -1,10 +1,14 @@
 package app.pankaj.api.auth
 
 import app.pankaj.api.auth.domain.UserRepository
+import app.pankaj.api.auth.domain.model.LoginUser
 import app.pankaj.api.auth.domain.model.Register
 import app.pankaj.api.auth.domain.model.Role
+import app.pankaj.dao.asUser
 import app.pankaj.methods.hmPost
 import app.pankaj.utils.ApiResponse
+import app.pankaj.utils.TokenUtils
+import app.pankaj.utils.TokenUtils.generatePassword
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -30,6 +34,36 @@ fun Route.register() {
             call.respond(HttpStatusCode.OK, ApiResponse(
                 code = HttpStatusCode.OK.value,
                 message = "User registered successfully"
+            ))
+        }
+    }
+
+
+    hmPost (path = "/login", acceptedRoles = hashSetOf(Role.Public), validateRequest = {
+        call.isLoginIsValidRequest()
+    }){
+        val user = userRepository.findUserByEmail(it.email)
+        if (user!=null){
+            val hashedPassword = generatePassword(it.password, user.salt)
+            if (user.password != hashedPassword) {
+                call.respond(HttpStatusCode.BadRequest, ApiResponse(
+                    code = HttpStatusCode.BadRequest.value,
+                    message = "Invalid login credentials"
+                ))
+            }
+
+            call.respond(HttpStatusCode.OK, ApiResponse(
+                code = HttpStatusCode.OK.value,
+                message = "Login",
+                data = user.asUser().toLoginUser(
+                    token = TokenUtils.createOAuthToken(user.email, user.fullName),
+                    refreshToken =  TokenUtils.refreshToken(user.id.value)
+                )
+            ))
+        }else{
+            call.respond(HttpStatusCode.BadRequest, ApiResponse(
+                code = HttpStatusCode.BadRequest.value,
+                message = "Invalid login credentials"
             ))
         }
     }

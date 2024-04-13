@@ -11,14 +11,14 @@ import kotlin.time.Duration.Companion.minutes
 
 object TokenUtils {
 
-    fun createToken(id: Int): String {
+    fun refreshToken(id: Int): String {
         return JWT.create().withAudience(Props.JWT.audience).withIssuer(Props.JWT.issuer)
             .withClaim(USER_ID_CLAIM_NAME, id)
             .withExpiresAt(Date(System.currentTimeMillis() + 30.days.inWholeMilliseconds))
             .sign(Algorithm.HMAC256(Props.JWT.secret))
     }
 
-    fun createOAuthToken(email: String, fullName: String, appleId: String? = null): String {
+    fun createOAuthToken(email: String, fullName: String): String {
         return JWT.create()
             .withAudience(Props.JWT.audience)
             .withIssuer(Props.JWT.issuer)

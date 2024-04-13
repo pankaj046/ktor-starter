@@ -15,7 +15,7 @@ object UsersTable: IntIdTable("Users") {
     val fullName = varchar("fullName", 64)
     val role = enumeration<Role>("role")
     val isDeleted = bool("isDeleted").default(false)
-    val isActive = bool("isActive").default(true)
+    val isActive = bool("isActive").default(false)
     val createdOn = timestamp("createdOn")
     val updatedOn = timestamp("updatedOn")
 }
