@@ -15,11 +15,11 @@ import io.ktor.util.pipeline.*
 
 
 @KtorDsl
-fun Route.hmPost(
+fun <T> Route.hmPost(
     acceptedRoles: Set<Role> = setOf(Role.Public),
     path: String = "",
-    validateRequest: suspend PipelineContext<Unit, ApplicationCall>.() -> String,
-    body: suspend UserContext.() -> Unit
+    validateRequest: suspend PipelineContext<Unit, ApplicationCall>.() -> Pair<String, T?>,
+    body: suspend UserContext.(T) -> Unit
 ) {
     authenticate(AUTH_JWT, optional = acceptedRoles.contains(Role.Public)) {
         post(path) ktorPost@{
@@ -27,7 +27,7 @@ fun Route.hmPost(
             if (!acceptedRoles.contains(Role.Public) && !acceptedRoles.contains(user.role)) {
                 respondError(HttpStatusCode.Forbidden)
             }
-            val message = validateRequest()
+            val (message, data) = validateRequest()
             if (message.isNotEmpty()) {
                 call.respond(HttpStatusCode.BadRequest, ApiResponse(
                     code = HttpStatusCode.BadRequest.value,
@@ -35,7 +35,7 @@ fun Route.hmPost(
                 ))
                 return@ktorPost
             }
-            body.invoke(UserContext(call, user))
+            data?.let { body.invoke(UserContext(call, user), it) }
         }
     }
 }

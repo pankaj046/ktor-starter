@@ -1,33 +1,36 @@
 package app.pankaj.api.auth
 
 import app.pankaj.api.auth.domain.model.Register
+import io.ktor.server.application.*
+import io.ktor.server.request.*
 
 
 import java.util.regex.Pattern
 
-fun isRegisterIsValidRequest(request: Register?): String {
+suspend fun ApplicationCall.isRegisterIsValidRequest(): Pair<String, Register?> {
+    val request = this.receiveNullable<Register>()
     var error = ""
     if (request == null) {
         error = "Invalid or missing request body."
-        return error
+        return Pair(error, null)
     }
     if (request.email.isEmpty()) {
         error = "Email cannot be empty."
-        return error
+        return Pair(error, null)
     }
     if (!isEmailValid(request.email)) {
         error = "Invalid email format."
-        return error
+        return Pair(error, null)
     }
     if (request.password.length < 8) {
         error = "Password must be at least 8 characters long."
-        return error
+        return Pair(error, null)
     }
     if (!isPasswordStrong(request.password)) {
         error = "Password must contain at least one uppercase letter, one lowercase letter, and one number."
-        return error
+        return Pair(error, null)
     }
-    return error
+    return Pair(error, request)
 }
 
 fun isEmailValid(email: String): Boolean {

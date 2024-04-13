@@ -17,17 +17,16 @@ fun Route.register() {
     val userRepository: UserRepository by inject()
 
     hmPost (path = "/register", acceptedRoles = hashSetOf(Role.Public), validateRequest = {
-        isRegisterIsValidRequest(kotlin.runCatching { call.receiveNullable<Register>() }.getOrNull())
+        call.isRegisterIsValidRequest()
     }){
-        val request =  call.receive<Register>()
-        val user = userRepository.findUserByEmail(request.email)
+        val user = userRepository.findUserByEmail(it.email)
         if (user!=null){
             call.respond(HttpStatusCode.BadRequest, ApiResponse(
                 code = HttpStatusCode.BadRequest.value,
                 message = "User already exists"
             ))
         }else{
-            userRepository.registerUser(request)
+            userRepository.registerUser(it)
             call.respond(HttpStatusCode.OK, ApiResponse(
                 code = HttpStatusCode.OK.value,
                 message = "User registered successfully"

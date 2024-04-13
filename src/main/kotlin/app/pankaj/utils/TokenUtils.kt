@@ -27,4 +27,8 @@ object TokenUtils {
             .withExpiresAt(Date(System.currentTimeMillis() + 10.minutes.inWholeMilliseconds))
             .sign(Algorithm.HMAC256(Props.JWT.secret))
     }
+
+    fun generatePassword(password: String, salt: String): String {
+        return (password + salt).toSHA256()
+    }
 }
