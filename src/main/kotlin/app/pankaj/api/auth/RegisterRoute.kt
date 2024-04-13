@@ -41,6 +41,17 @@ fun Route.register() {
     }){
         val user = userRepository.findUserByEmail(it.email)
         if (user!=null){
+            if (user.isDeleted || !user.isActive) {
+                /**
+                 * send this response when user is not active or account
+                 * consider as deleted
+                 * */
+                call.respond(HttpStatusCode.BadRequest, ApiResponse<Unit>(
+                    code = HttpStatusCode.BadRequest.value,
+                    message = "Invalid login credentials"
+                ))
+            }
+
             val hashedPassword = generatePassword(it.password, user.salt)
             if (user.password != hashedPassword) {
                 call.respond(HttpStatusCode.BadRequest, ApiResponse<Unit>(

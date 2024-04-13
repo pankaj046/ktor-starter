@@ -17,3 +17,26 @@ Information on how others can contribute to the project.
 
 ## Contact
 Ways to reach out in case of questions or feedback.
+
+
+## CURl Request
+Register
+
+`curl -X POST \
+    http://127.0.0.1:8080/api/v1/auth/register \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "email": "pankaj.sharma@yopmail.com",
+    "fullName": "Pankaj",
+    "password": "Pankaj@123"
+}'`
+
+Login
+
+`curl -X POST \
+    http://127.0.0.1:8080/api/v1/auth/login \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "email": "pankaj.sharma@yopmail.com",
+    "password": "Pankaj@123"
+}'`
