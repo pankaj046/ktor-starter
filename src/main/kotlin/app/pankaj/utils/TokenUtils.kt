@@ -16,23 +16,21 @@ object TokenUtils {
         .withIssuer(Props.JWT.issuer)
         .build()
 
-    fun refreshToken(id: Int): String {
+    fun createToken(id: Int): String {
         return JWT.create().withAudience(Props.JWT.audience).withIssuer(Props.JWT.issuer)
             .withClaim(USER_ID_CLAIM_NAME, id)
-            .withExpiresAt(Date(System.currentTimeMillis() + 30.days.inWholeMilliseconds))
+            .withExpiresAt(Date(System.currentTimeMillis() + 1.days.inWholeMilliseconds))
             .sign(Algorithm.HMAC256(Props.JWT.secret))
     }
 
-    fun createToken(email: String, fullName: String): String {
+    fun refreshToken(id: Int): String {
         return JWT.create()
             .withAudience(Props.JWT.audience)
             .withIssuer(Props.JWT.issuer)
-            .withClaim(OAuthEmailClaim, email)
-            .withClaim(OAuthFullNameClaim, fullName)
-            .withExpiresAt(Date(System.currentTimeMillis() + 10.minutes.inWholeMilliseconds))
+            .withClaim(USER_ID_CLAIM_NAME, id)
+            .withExpiresAt(Date(System.currentTimeMillis() + 7.days.inWholeMilliseconds))
             .sign(Algorithm.HMAC256(Props.JWT.secret))
     }
-
 
     fun validateToken(token: String): Boolean {
         try {

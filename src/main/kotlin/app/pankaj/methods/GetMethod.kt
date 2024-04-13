@@ -23,7 +23,10 @@ fun <T> Route.hmGet(
         get(path) ktorPost@{
             val user = getUser()
             if (!acceptedRoles.contains(Role.Public) && !acceptedRoles.contains(user.role)) {
-                respondError(HttpStatusCode.Forbidden)
+                call.respond(HttpStatusCode.Forbidden, ApiResponse<Unit>(
+                    code = HttpStatusCode.Forbidden.value,
+                    message = "Access denied"
+                ))
             }
             val (message, data) = validateRequest()
             if (message.isNotEmpty()) {

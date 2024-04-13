@@ -1,12 +1,12 @@
 package app.pankaj.config
 
+import app.pankaj.api.auth.domain.model.Register
 import app.pankaj.utils.ApiResponse
 import app.pankaj.utils.Props
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
+import io.ktor.server.application.*
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
@@ -17,6 +17,10 @@ const val USER_ID_CLAIM_NAME = "userId"
 const val RESET_USER_ID_CLAIM_NAME = "resetUserId"
 const val OAuthEmailClaim = "email"
 const val OAuthFullNameClaim = "name"
+
+suspend fun ApplicationCall.noData(): Pair<String, String?> {
+    return Pair("", "")
+}
 fun Application.configureJwt() {
     install(Authentication) {
         jwt(AUTH_JWT) {

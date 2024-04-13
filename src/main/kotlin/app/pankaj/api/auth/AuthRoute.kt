@@ -64,7 +64,7 @@ fun Route.register() {
                 code = HttpStatusCode.OK.value,
                 message = "Login",
                 data = user.asUser().toLoginUser(
-                    token = TokenUtils.createToken(user.email, user.fullName),
+                    token = TokenUtils.createToken(user.id.value),
                     refreshToken =  TokenUtils.refreshToken(user.id.value)
                 )
             ))
