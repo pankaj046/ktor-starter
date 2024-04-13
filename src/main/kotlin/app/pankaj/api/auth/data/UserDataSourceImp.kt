@@ -6,6 +6,7 @@ import app.pankaj.dao.UserDao
 import app.pankaj.dao.UsersTable
 import app.pankaj.utils.TokenUtils.generatePassword
 import app.pankaj.utils.randomString
+import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.Instant
 
@@ -21,17 +22,18 @@ class UserDataSourceImp : UserDataSource {
     override suspend fun registerUser(request: Register): UserDao? {
         val saltValue = randomString(24)
         return newSuspendedTransaction {
-            UserDao.new {
-                email = request.email
-                fullName = request.fullName
-                password = generatePassword(request.password, saltValue)
-                salt = saltValue
-                role = Role.USER
-                isDeleted = false
-                isActive = false
-                createdOn = Instant.now()
-                updatedOn = Instant.now()
+            val id = UsersTable.insertAndGetId {
+                it[email] = request.email
+                it[fullName] = request.fullName
+                it[password] = generatePassword(request.password, saltValue)
+                it[salt] = saltValue
+                it[role] = Role.USER
+                it[isDeleted] = false
+                it[isActive] = false
+                it[createdOn] = Instant.now()
+                it[updatedOn] = Instant.now()
             }
+            return@newSuspendedTransaction UserDao.findById(id)
         }
     }
 

@@ -38,7 +38,7 @@ fun Application.configureJwt() {
                 }
             }
             challenge { defaultScheme, realm ->
-                call.respond(HttpStatusCode.Unauthorized, ApiResponse(
+                call.respond(HttpStatusCode.Unauthorized, ApiResponse<Unit>(
                     code = HttpStatusCode.Unauthorized.value,
                     message = "Token is not valid or has expired"
                 ))

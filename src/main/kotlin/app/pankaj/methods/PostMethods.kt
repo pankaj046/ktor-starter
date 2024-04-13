@@ -29,7 +29,7 @@ fun <T> Route.hmPost(
             }
             val (message, data) = validateRequest()
             if (message.isNotEmpty()) {
-                call.respond(HttpStatusCode.BadRequest, ApiResponse(
+                call.respond(HttpStatusCode.BadRequest, ApiResponse<Unit>(
                     code = HttpStatusCode.BadRequest.value,
                     message = message
                 ))
