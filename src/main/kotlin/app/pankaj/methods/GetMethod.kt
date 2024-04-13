@@ -6,7 +6,6 @@ import app.pankaj.utils.ApiResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
 import io.ktor.util.KtorDsl
-import app.pankaj.utils.respondError
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

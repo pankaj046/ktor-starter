@@ -72,7 +72,7 @@ fun PipelineContext<Unit, ApplicationCall>.getUser(): User {
 
     return userId?.let { id ->
         transaction {
-            UserDao.find { UsersTable.id eq id and not(UsersTable.isDeleted) and not(UsersTable.isActive) }.firstOrNull()?.asUser()
+            UserDao.find { UsersTable.id eq id and not(UsersTable.isDeleted) and  (UsersTable.isActive eq true) }.firstOrNull()?.asUser()
         }
     } ?: User(id = -1, email = "", fullName = "", role = Role.Public)
 }

@@ -15,8 +15,6 @@ import io.ktor.server.response.respond
 const val AUTH_JWT = "auth-jwt"
 const val USER_ID_CLAIM_NAME = "userId"
 const val RESET_USER_ID_CLAIM_NAME = "resetUserId"
-const val OAuthEmailClaim = "email"
-const val OAuthFullNameClaim = "name"
 
 suspend fun ApplicationCall.noData(): Pair<String, String?> {
     return Pair("", "")
@@ -32,10 +30,7 @@ fun Application.configureJwt() {
                     .build()
             )
             validate { credential ->
-                if (
-                    credential.payload.getClaim(USER_ID_CLAIM_NAME).asString() != ""
-                    || credential.payload.getClaim(RESET_USER_ID_CLAIM_NAME).asString() != ""
-                ) {
+                if (credential.payload.getClaim(USER_ID_CLAIM_NAME).asString() != "") {
                     JWTPrincipal(credential.payload)
                 } else {
                     null
