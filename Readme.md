@@ -40,3 +40,8 @@ Login
     "email": "pankaj.sharma@yopmail.com",
     "password": "Pankaj@123"
 }'`
+
+USER Info
+
+`curl -X GET "http://0.0.0.0:8080/api/v1/user" -H "Authorization: Bearer eyJhbGciOiJMCIsInN"
+`
