@@ -19,5 +19,9 @@ class UserRepositoryImp(
         TODO("Not yet implemented")
     }
 
+    override suspend fun findUserByEmail(email: String): UserDao? {
+        return userDataSource.findUserByEmail(email)
+    }
+
 
 }

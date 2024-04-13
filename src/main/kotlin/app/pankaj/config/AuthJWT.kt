@@ -15,7 +15,8 @@ import io.ktor.server.response.respond
 const val AUTH_JWT = "auth-jwt"
 const val USER_ID_CLAIM_NAME = "userId"
 const val RESET_USER_ID_CLAIM_NAME = "resetUserId"
-
+const val OAuthEmailClaim = "email"
+const val OAuthFullNameClaim = "name"
 fun Application.configureJwt() {
     install(Authentication) {
         jwt(AUTH_JWT) {
