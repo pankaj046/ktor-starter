@@ -31,8 +31,8 @@ Getting Started
 
     
     1. Clone the repository:
-       git clone https://github.com/yourusername/ktor-server-demo.git
-       cd ktor-server-demo
+       git clone https://github.com/pankaj046/ktor-starter.git
+       cd ktor-starter
     
     2. Build the project:
        ./gradlew build
